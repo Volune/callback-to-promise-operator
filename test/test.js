@@ -1,6 +1,11 @@
 /* eslint-env mocha */
 import expect from 'must';
-import withproxy, { noproxy, CALLBACK_ARGUMENTS, RETURNED_VALUE, THROWN_VALUE } from '../src/index';
+import withProxy, {
+  noproxy,
+  CALLBACK_ARGUMENTS,
+  RETURNED_VALUE,
+  THROWN_VALUE,
+} from '../src/index';
 
 const SOME_ARG = { isSomeArg: true };
 const SOME_CALLBACK_ARGS = [null, 1, 2, 3];
@@ -37,7 +42,6 @@ const describeTests = (operator) => {
     return expect(promise).to.reject.to.equal(SOME_THROWN_EXCEPTION);
   });
 
-
   it('rejects on sync callback error', () => {
     const asyncFunc = (callback) => {
       callback(SOME_ERROR);
@@ -73,7 +77,8 @@ const describeTests = (operator) => {
     };
     const promise = asyncFunc[operator]();
     expect(promise).to.be.a(Promise);
-    return expect(promise).to.resolve.to.equal(SOME_CALLBACK_ARGS[1])
+    return expect(promise)
+      .to.resolve.to.equal(SOME_CALLBACK_ARGS[1])
       .then(() => {
         expect(promise[CALLBACK_ARGUMENTS]).to.eql(SOME_CALLBACK_ARGS);
       });
@@ -103,8 +108,7 @@ const describeTests = (operator) => {
 
   it('forwards function name and arguments length', () => {
     // eslint-disable-next-line no-unused-vars
-    function someFunction(arg1, arg2) {
-    }
+    function someFunction(arg1, arg2) {}
 
     const promisified = someFunction[operator];
     expect(promisified()).to.be.a(Promise);
@@ -116,7 +120,7 @@ const describeTests = (operator) => {
 
 describe('callback-to-promise-operator', () => {
   describe('with proxy', () => {
-    describeTests(withproxy);
+    describeTests(withProxy);
 
     it('promisified "." member with expected context', () => {
       const object = {
@@ -125,7 +129,7 @@ describe('callback-to-promise-operator', () => {
           setTimeout(() => callback(null, context), 0);
         },
       };
-      const promise = object[withproxy].asyncFunc();
+      const promise = object[withProxy].asyncFunc();
       expect(promise).to.be.a(Promise);
       return expect(promise).to.resolve.to.equal(object);
     });
@@ -138,7 +142,7 @@ describe('callback-to-promise-operator', () => {
           setTimeout(() => callback(null, context), 0);
         },
       };
-      const promise = object[withproxy][symbol]();
+      const promise = object[withProxy][symbol]();
       expect(promise).to.be.a(Promise);
       return expect(promise).to.resolve.to.equal(object);
     });

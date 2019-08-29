@@ -124,8 +124,4 @@ Object.defineProperty(Function.prototype, NO_PROXY_OPERATOR, noProxyGetter);
 
 export default OPERATOR;
 export const noproxy = NO_PROXY_OPERATOR;
-export {
-  CALLBACK_ARGUMENTS,
-  RETURNED_VALUE,
-  THROWN_VALUE,
-};
+export { CALLBACK_ARGUMENTS, RETURNED_VALUE, THROWN_VALUE };
